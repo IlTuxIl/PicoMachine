@@ -1,0 +1,43 @@
+FLECKINGER Julien P1308611
+
+Contenu de l'archive : 
+======================
+
+	-gKit/ : la librairie gKit (modifié)
+	-src/ : les sources du projet
+	-data/shaders : les 3 shaders utilisé (terrain, players et obstacle)
+	-data/ : les .obj, les textures, les matériaux (non utilisés), le fichier contenant les CheckPoints.
+	-obj/ : Utilisé lors de la compilation.
+	CMakeLists.txt : fichier de configuration de cmake
+
+COMPILATION :
+=============
+
+Il est nécessaire d'avoir cmake 3.5 ou supérieur pour compiler le projet (sinon
+commenter la 1er ligne du CMakeLists.txt).
+Ainsi que les librairies OpenGL, GLEW, SDL2 et SDL2IMAGE.
+
+	cmake CMakeLists.txt
+	make
+
+EXECUTION :
+===========
+
+Il faut ce trouver dans la racine du projet pour pouvoir l'exécuter
+
+	./PicoMachine
+
+
+COMPREHENSION DU CODE :
+=======================
+
+Le fichier Main instancie une Scène.
+La Scène est l'élément central du projet, elle stocke tous les GameObjects, les met à jour et les affiches.
+De plus, la Scène gère la logique du jeu (comptabilise les points, respawn les joueurs, détecte les chutes et les sorties de caméra)
+
+Il existe 3 types de GameObjects : 
+  - Player : Un Player est controllé par un joueur, sa fonction update lui permet de ce déplacer et de gérer les collisions avec d'autres GameObject. De plus il recupère sa normal et sa hauteur en ce projetant sur le terrain
+  - Obstacle : Un Obstacle ne possede qu'un collider OBB (car nécessaire pour les joueurs et déjà implémenté)
+  - Terrain : Possède des tableaux de triangles et de normales séparés en 2 morceaux (pour réduire le temps de recherche par 2), fournit au Player une normale et une hauteur (grâce à une interpolation linéaire).
+  
+Pour finir, le code est propre sous Valgrind, les seuls erreurs fuite viennent de openGL et les erreurs de la fonction SDL_GetTicks().
